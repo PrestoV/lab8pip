@@ -1,0 +1,33 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <h:outputStylesheet name="style.css"/>
+        <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
+    </h:head>
+
+    <h:body>
+        <ui:include src="header.xhtml"/>
+        <div class="card">
+            <div class="card_body">
+                <h:form>
+                    <h:outputText id="current_date" value="#{interactiveDate.date}">
+                        <f:convertDateTime type="both"/>
+                    </h:outputText>
+                    <p:poll interval="12" update="current_date"/>
+                </h:form>
+            </div>
+            <div class="card_header">
+                Текущее время
+            </div>
+        </div>
+        <div align="center" style="margin-top: 50px;">
+            <h:button outcome="main" styleClass="mt_button" value="Основная страница"/>
+        </div>
+    </h:body>
+
+</html>

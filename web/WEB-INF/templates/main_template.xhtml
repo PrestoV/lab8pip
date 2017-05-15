@@ -1,0 +1,88 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:head>
+        <h:outputScript name="script.js"/>
+        <h:outputStylesheet name="style.css"/>
+        <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
+    </h:head>
+
+    <h:body onload="drawPlot();">
+        <ui:include src="header.xhtml"/>
+        <div class="card" style="width: 900px;">
+            <canvas id="plot" height="440px" width="440px" style="padding-top: 20px; padding-bottom: 20px;"/>
+            <div style="float: right; padding: 30px;">
+                <div class="value_group">
+                    <div class="value_group_header">
+                        Координаты точки
+                    </div>
+                    <h:message for="y_input"/>
+                    <h:form>
+                        <p:panelGrid columns="5" style="width: 100%; background-color: white;">
+                            <f:facet name="header">
+                                X
+                            </f:facet>
+                            <h:commandLink onclick="selectX(this); return false;">-4</h:commandLink>
+                            <h:commandLink onclick="selectX(this); return false;">-3</h:commandLink>
+                            <h:commandLink onclick="selectX(this); return false;">-2</h:commandLink>
+                            <h:commandLink onclick="selectX(this); return false;">-1</h:commandLink>
+                            <h:commandLink onclick="selectX(this); return false;">0</h:commandLink>
+                            <h:commandLink onclick="selectX(this); return false;">1</h:commandLink>
+                            <h:commandLink onclick="selectX(this); return false;">2</h:commandLink>
+                            <h:commandLink onclick="selectX(this); return false;">3</h:commandLink>
+                            <h:commandLink onclick="selectX(this); return false;">4</h:commandLink>
+                        </p:panelGrid>
+                    </h:form>
+                    <p:panelGrid columns="1" style="width: 100%; background-color: white; margin-top: 3px;">
+                        <f:facet name="header">
+                                Y
+                        </f:facet>
+                        <h:inputText id="y_input" style="width: 90%;" a:placeholder="-3 .. 3"
+                                     validatorMessage="Значение Y указано некорректно!" onchange="selectY(this);">
+                            <f:validateDoubleRange minimum = "-3" maximum = "3" />
+                        </h:inputText>
+                    </p:panelGrid>
+                </div>
+
+                <div class="value_group" style="margin-top: 15px;">
+                    <div class="value_group_header">
+                        Параметр
+                    </div>
+                    <h:form>
+                        <p:panelGrid columns="5" style="width: 100%; background-color: white;">
+                            <f:facet name="header">
+                                R
+                            </f:facet>
+                            <h:commandButton immediate="true" styleClass="r_button" value="1" onclick="selectR(this); return false;"/>
+                            <h:commandButton immediate="true" styleClass="r_button" value="1.5" onclick="selectR(this); return false;"/>
+                            <h:commandButton immediate="true" styleClass="r_button" value="2" onclick="selectR(this); return false;"/>
+                            <h:commandButton immediate="true" styleClass="r_button" value="2.5" onclick="selectR(this); return false;"/>
+                            <h:commandButton immediate="true" styleClass="r_button" value="3" onclick="selectR(this); return false;"/>
+                        </p:panelGrid>
+                    </h:form>
+                </div>
+                <div align="center" style="margin-top: 20px;">
+                    <h:form id="form">
+                        <h:commandButton value="Проверить" styleClass="mt_button" style="width: 100%;">
+                            <h:inputHidden id="x_param" value="#{paramArea.xParam}"/>
+                            <h:inputHidden id="y_param" value="#{paramArea.yParam}"/>
+                            <h:inputHidden id="r_param" value="#{paramArea.rParam}"/>
+                            <f:ajax render="x_val y_val r_val"/>
+                        </h:commandButton>
+                    </h:form>
+                </div>
+                <!--TODO: REMOVE!! JUST TEST!!-->
+                <h:outputText id="x_val" value="#{paramArea.xParam}"/>
+                <h:outputText id="y_val" value="#{paramArea.yParam}"/>
+                <h:outputText id="r_val" value="#{paramArea.rParam}"/>
+            </div>
+
+        </div>
+    </h:body>
+
+</html>
