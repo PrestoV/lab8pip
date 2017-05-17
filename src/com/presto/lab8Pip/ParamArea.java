@@ -1,42 +1,51 @@
 package com.presto.lab8Pip;
 
-import javax.faces.bean.*;
+
+import org.primefaces.json.JSONArray;
+import org.primefaces.json.JSONObject;
+
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
+import java.util.LinkedList;
 
 
-@ManagedBean(name = "paramArea")
-@RequestScoped
+@ManagedBean(name = "paramArea", eager = true)
+@ApplicationScoped
 public class ParamArea implements Serializable {
-    @ManagedProperty(value="#{param.get(\"form:x_param\")}")
-    private Double xParam;
+    private LinkedList<Point> points = new LinkedList<>();
+    private double currentR = 1.0;
 
-    @ManagedProperty(value="#{param.get(\"form:y_param\")}")
-    private Double yParam;
-
-    @ManagedProperty(value="#{param.get(\"form:r_param\")}")
-    private Double rParam;
-
-    public Double getxParam() {
-        return xParam;
+    public void addPoint(Point point) {
+        points.add(0, point);
     }
 
-    public Double getyParam() {
-        return yParam;
+    public LinkedList<Point> getPoints() {
+        return points;
     }
 
-    public Double getrParam() {
-        return rParam;
+    public void scalePoints(double newR) {
+        double scale = newR / currentR;
+        for(Point point : points) {
+            point.setxParam(point.getxParam() * scale);
+            point.setyParam(point.getyParam() * scale);
+            //TODO: DO CHECK!!!
+        }
+        currentR = newR;
     }
 
-    public void setxParam(Double xParam) {
-        this.xParam = xParam;
-    }
+    @Override
+    public String toString() {
+        JSONArray pointsArray = new JSONArray();
+        for(Point point : points) {
+            JSONObject pointJson = new JSONObject();
+            pointJson.put("x", point.getxParam());
+            pointJson.put("y", point.getyParam());
+            pointJson.put("r", point.getrParam());
+            pointJson.put("inArea", point.getInArea());
+            pointsArray.put(pointJson);
+        }
 
-    public void setyParam(Double yParam) {
-        this.yParam = yParam;
-    }
-
-    public void setrParam(Double rParam) {
-        this.rParam = rParam;
+        return pointsArray.toString();
     }
 }

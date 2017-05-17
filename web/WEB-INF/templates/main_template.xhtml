@@ -14,16 +14,18 @@
 
     <h:body onload="drawPlot();">
         <ui:include src="header.xhtml"/>
+        <h:inputHidden id="json_points" value="#{paramArea.toString()}"/>
         <div class="card" style="width: 900px;">
-            <canvas id="plot" height="440px" width="440px" style="padding-top: 20px; padding-bottom: 20px;"/>
+            <canvas id="plot" onclick="plotClick(event)" height="440px" width="440px"
+                    style="margin-top: 20px; margin-bottom: 20px;"/>
             <div style="float: right; padding: 30px;">
                 <div class="value_group">
                     <div class="value_group_header">
                         Координаты точки
                     </div>
-                    <h:message for="y_input"/>
-                    <h:form>
-                        <p:panelGrid columns="5" style="width: 100%; background-color: white;">
+                    <label id="x_error" style="color: #d32f2f;"/>
+                    <h:form style="margin-bottom: 8px;">
+                        <p:panelGrid id="x_input" columns="5" style="width: 100%; background-color: white;">
                             <f:facet name="header">
                                 X
                             </f:facet>
@@ -38,14 +40,12 @@
                             <h:commandLink onclick="selectX(this); return false;">4</h:commandLink>
                         </p:panelGrid>
                     </h:form>
+                    <label id="y_error" style="color: #d32f2f;"/>
                     <p:panelGrid columns="1" style="width: 100%; background-color: white; margin-top: 3px;">
                         <f:facet name="header">
                                 Y
                         </f:facet>
-                        <h:inputText id="y_input" style="width: 90%;" a:placeholder="-3 .. 3"
-                                     validatorMessage="Значение Y указано некорректно!" onchange="selectY(this);">
-                            <f:validateDoubleRange minimum = "-3" maximum = "3" />
-                        </h:inputText>
+                        <h:inputText id="y_input" onchange="selectY(this);" a:placeholder="-3 .. 3" maxlength="10" style="width: 30%;"/>
                     </p:panelGrid>
                 </div>
 
@@ -53,36 +53,78 @@
                     <div class="value_group_header">
                         Параметр
                     </div>
+                    <label id="r_error" style="color: #d32f2f;"/>
                     <h:form>
                         <p:panelGrid columns="5" style="width: 100%; background-color: white;">
                             <f:facet name="header">
                                 R
                             </f:facet>
-                            <h:commandButton immediate="true" styleClass="r_button" value="1" onclick="selectR(this); return false;"/>
-                            <h:commandButton immediate="true" styleClass="r_button" value="1.5" onclick="selectR(this); return false;"/>
-                            <h:commandButton immediate="true" styleClass="r_button" value="2" onclick="selectR(this); return false;"/>
-                            <h:commandButton immediate="true" styleClass="r_button" value="2.5" onclick="selectR(this); return false;"/>
-                            <h:commandButton immediate="true" styleClass="r_button" value="3" onclick="selectR(this); return false;"/>
+                            <h:commandButton immediate="true" styleClass="r_button" value="1" onclick="return selectR(this);">
+                                <f:ajax listener="#{paramArea.scalePoints(1.0)}"
+                                        render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
+                            </h:commandButton>
+                            <h:commandButton immediate="true" styleClass="r_button" value="1.5" onclick="return selectR(this);">
+                                <f:ajax listener="#{paramArea.scalePoints(1.5)}"
+                                        render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
+                            </h:commandButton>
+                            <h:commandButton immediate="true" styleClass="r_button" value="2" onclick="return selectR(this);">
+                                <f:ajax listener="#{paramArea.scalePoints(2.0)}"
+                                        render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
+                            </h:commandButton>
+                            <h:commandButton immediate="true" styleClass="r_button" value="2.5" onclick="return selectR(this);">
+                                <f:ajax listener="#{paramArea.scalePoints(2.5)}"
+                                        render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
+                            </h:commandButton>
+                            <h:commandButton immediate="true" styleClass="r_button" value="3" onclick="return selectR(this);">
+                                <f:ajax listener="#{paramArea.scalePoints(3.0)}"
+                                        render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
+                            </h:commandButton>
                         </p:panelGrid>
                     </h:form>
                 </div>
-                <div align="center" style="margin-top: 20px;">
+                <div align="center" style="margin-top: 15px;">
                     <h:form id="form">
-                        <h:commandButton value="Проверить" styleClass="mt_button" style="width: 100%;">
-                            <h:inputHidden id="x_param" value="#{paramArea.xParam}"/>
-                            <h:inputHidden id="y_param" value="#{paramArea.yParam}"/>
-                            <h:inputHidden id="r_param" value="#{paramArea.rParam}"/>
-                            <f:ajax render="x_val y_val r_val"/>
+                        <h:commandButton id="check_button" value="Проверить" onclick="return check();" styleClass="mt_button" style="width: 100%;">
+                            <h:inputHidden id="x_param" value="#{point.xParam}"/>
+                            <h:inputHidden id="y_param" value="#{point.yParam}"/>
+                            <h:inputHidden id="r_param" value="#{point.rParam}"/>
+                            <f:ajax render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
                         </h:commandButton>
                     </h:form>
                 </div>
-                <!--TODO: REMOVE!! JUST TEST!!-->
-                <h:outputText id="x_val" value="#{paramArea.xParam}"/>
-                <h:outputText id="y_val" value="#{paramArea.yParam}"/>
-                <h:outputText id="r_val" value="#{paramArea.rParam}"/>
             </div>
-
         </div>
+        <h:panelGroup id="resulr_table_wrapper">
+            <h:panelGroup layout="block" class="card" style="width: 900px; margin-top: 30px;" rendered="#{not empty paramArea.points}">
+                <div id="result-title">
+                    Результаты проверок
+                </div>
+
+                <div id="scroll-div">
+
+            <h:dataTable id="result-table" value="#{paramArea.points}" var="point">
+                <h:column>
+                    <f:facet name="header">X</f:facet>
+                    #{point.xParam}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Y</f:facet>
+                    #{point.yParam}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">R</f:facet>
+                    #{point.rParam}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">принадлежит области</f:facet>
+                    #{point.inArea ? "да" : "нет"}
+                </h:column>
+            </h:dataTable>
+
+                </div>
+
+            </h:panelGroup>
+        </h:panelGroup>
     </h:body>
 
 </html>
