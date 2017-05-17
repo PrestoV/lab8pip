@@ -14,7 +14,7 @@
 
     <h:body onload="drawPlot();">
         <ui:include src="header.xhtml"/>
-        <h:inputHidden id="json_points" value="#{paramArea.toString()}"/>
+        <h:inputHidden id="json_points" value="#{paramArea.getScaledPointList()}"/>
         <div class="card" style="width: 900px;">
             <canvas id="plot" onclick="plotClick(event)" height="440px" width="440px"
                     style="margin-top: 20px; margin-bottom: 20px;"/>
@@ -54,30 +54,26 @@
                         Параметр
                     </div>
                     <label id="r_error" style="color: #d32f2f;"/>
-                    <h:form>
+                    <h:form id="rform">
+                        <h:inputHidden id="r" type="hidden" name="r"/>
                         <p:panelGrid columns="5" style="width: 100%; background-color: white;">
                             <f:facet name="header">
                                 R
                             </f:facet>
                             <h:commandButton immediate="true" styleClass="r_button" value="1" onclick="return selectR(this);">
-                                <f:ajax listener="#{paramArea.scalePoints(1.0)}"
-                                        render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
+                                <f:ajax render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
                             </h:commandButton>
                             <h:commandButton immediate="true" styleClass="r_button" value="1.5" onclick="return selectR(this);">
-                                <f:ajax listener="#{paramArea.scalePoints(1.5)}"
-                                        render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
+                                <f:ajax render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
                             </h:commandButton>
                             <h:commandButton immediate="true" styleClass="r_button" value="2" onclick="return selectR(this);">
-                                <f:ajax listener="#{paramArea.scalePoints(2.0)}"
-                                        render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
+                                <f:ajax render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
                             </h:commandButton>
                             <h:commandButton immediate="true" styleClass="r_button" value="2.5" onclick="return selectR(this);">
-                                <f:ajax listener="#{paramArea.scalePoints(2.5)}"
-                                        render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
+                                <f:ajax render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
                             </h:commandButton>
                             <h:commandButton immediate="true" styleClass="r_button" value="3" onclick="return selectR(this);">
-                                <f:ajax listener="#{paramArea.scalePoints(3.0)}"
-                                        render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
+                                <f:ajax render="json_points resulr_table_wrapper" onevent="ajaxEvent"/>
                             </h:commandButton>
                         </p:panelGrid>
                     </h:form>

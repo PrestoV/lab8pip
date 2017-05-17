@@ -72,6 +72,7 @@ function selectR(element) {
         selectedRElement = element;
         selectedRElement.style.backgroundColor = "#E0E0E0";
         document.getElementById("form:r_param").value = selectedRElement.value;
+        document.getElementById("rform:r").value = selectedRElement.value;
         return true;
     } else {
         selectedRElement = null;
