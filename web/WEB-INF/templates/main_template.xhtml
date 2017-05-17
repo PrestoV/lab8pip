@@ -95,32 +95,31 @@
                 <div id="result-title">
                     Результаты проверок
                 </div>
-
                 <div id="scroll-div">
-
-            <h:dataTable id="result-table" value="#{paramArea.points}" var="point">
-                <h:column>
-                    <f:facet name="header">X</f:facet>
-                    #{point.xParam}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Y</f:facet>
-                    #{point.yParam}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">R</f:facet>
-                    #{point.rParam}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">принадлежит области</f:facet>
-                    #{point.inArea ? "да" : "нет"}
-                </h:column>
-            </h:dataTable>
-
+                    <h:dataTable id="result-table" value="#{paramArea.points}" var="point">
+                        <h:column>
+                            <f:facet name="header">X</f:facet>
+                            #{point.xParam}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Y</f:facet>
+                            #{point.yParam}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">R</f:facet>
+                            #{point.rParam}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">принадлежит области</f:facet>
+                            #{point.inArea ? "да" : "нет"}
+                        </h:column>
+                    </h:dataTable>
                 </div>
-
             </h:panelGroup>
         </h:panelGroup>
+        <div align="center" style="margin-top: 30px;">
+            <h:button outcome="launch" styleClass="mt_button" value="Стартовая страница"/>
+        </div>
     </h:body>
 
 </html>
