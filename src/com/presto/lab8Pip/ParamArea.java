@@ -9,26 +9,30 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.LinkedList;
+import java.util.List;
 
 
-@ManagedBean(name = "paramArea", eager = true)
+@ManagedBean(name = "paramArea")
 @ApplicationScoped
 public class ParamArea implements Serializable {
-    private LinkedList<Point> points = new LinkedList<>();
-
     public void addPoint(Point point) {
         point.setInArea(
                 pointCheck(point.getxParam(), point.getyParam(), point.getrParam())
         );
-        points.add(0, point);
+        ( new PointDAO() ).save(point);
     }
 
-    public LinkedList<Point> getPoints() {
-        return points;
+    public List<Point> getPoints() {
+        return ( new PointDAO() ).getAll();
+    }
+
+    public ParamArea() {
+    //  ( new PointDAO() ).incrementPoints();
     }
 
     public String getScaledPointList() {
         JSONArray pointsArray = new JSONArray();
+        List<Point> points = ( new PointDAO() ).getAll();
         Double r = null;
         String rValue;
 

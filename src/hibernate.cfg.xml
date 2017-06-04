@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory name="java:comp/env/hibernate/SessionFactory">
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.username">postgres_user</property>
+        <property name="hibernate.connection.password">503dae</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost/lab8Pip</property>
+        <property name="hbm2ddl.auto">create-drop</property>
+
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL82Dialect</property>
+
+        <mapping class="com.presto.lab8Pip.Point"/>
+    </session-factory>
+</hibernate-configuration>
